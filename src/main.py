@@ -8,6 +8,7 @@ CPS = 10
 MAX_CPS = 40
 KEY = "x"
 HOLD = False
+MOUSE_BUTTON = Button.left
 
 def click(button=Button.left):
     MOUSE.press(button)
@@ -26,6 +27,7 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--cps", help=f"autoclicker's cps. Max cps is {MAX_CPS}. Default cps is {CPS}.")
     parser.add_argument("-k", "--key", help=f"autoclicker's start key. Default key is \"{KEY}\".")
     parser.add_argument("--hold", help="[True/False] hold on keystroke.")
+    parser.add_argument("-b", "--button", help=f"[left/right] pressed mouse button. Default button is \"{MOUSE_BUTTON}\".")
 
     # Setting cps
     if parser.parse_args().cps:
@@ -47,6 +49,13 @@ if __name__ == "__main__":
             case "false":
                 HOLD = False
 
+    if parser.parse_args().button:
+        match parser.parse_args().button.lower():
+            case "left":
+                MOUSE_BUTTON = Button.left
+            case "right":
+                MOUSE_BUTTON = Button.right
+
     print((f"CPS: {CPS}\n" if not HOLD else "") + f"Press \"{KEY}\" to activate/stop the autoclicker.")
 
     # Actual autoclicker
@@ -63,9 +72,9 @@ if __name__ == "__main__":
                 print("Activated." if active else "Stopped.")
             if active:
                 if HOLD:
-                    hold_handler(held)
+                    hold_handler(held, button=MOUSE_BUTTON)
                 else:
-                    click()
+                    click(button=MOUSE_BUTTON)
                     sleep(1./CPS-(1./CPS)*(CPS/100)) # it's still not really precise but it is close enough.
         except KeyboardInterrupt:
             print("\nStopped.")
