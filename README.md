@@ -6,5 +6,5 @@
 ## Run
 Only works if ran it as root/administartor!
 
-	main.py [-h] [-c CPS] [-k KEY]
+	python3 src/main.py [-h] [-c CPS] [-k KEY]
 
